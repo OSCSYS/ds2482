@@ -89,7 +89,7 @@ uint8_t DS2482::busyWait(bool setReadPtr)
 }
 
 //----------interface
-void DS2482::reset()
+void DS2482::resetMaster()
 {
 	mTimeout = 0;
 	begin();
@@ -163,7 +163,7 @@ bool DS2482::selectChannel(uint8_t channel)
 
 
 
-bool DS2482::wireReset()
+bool DS2482::reset()
 {
 	busyWait(true);
 	begin();
@@ -246,7 +246,7 @@ uint8_t DS2482::search(uint8_t *newAddr)
 	if (searchExhausted) 
 		return 0;
 	
-	if (!wireReset()) 
+	if (!reset()) 
 		return 0;
 
 	busyWait(true);

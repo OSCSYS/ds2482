@@ -53,12 +53,12 @@ public:
 	DS2482(uint8_t address);
 	
 	bool configure(uint8_t config);
-	void reset();
+	void resetMaster();
 	
 	//DS2482-800 only
 	bool selectChannel(uint8_t channel);
 	
-	bool wireReset(); // return true if presence pulse is detected
+	bool reset(); // return true if presence pulse is detected
 	uint8_t wireReadStatus(bool setPtr=false);
 	
 	void write(uint8_t b, uint8_t power = 0);
