@@ -65,7 +65,7 @@ public:
 	uint8_t read();
 	
 	void wireWriteBit(uint8_t bit);
-	uint8_t wireReadBit();
+	uint8_t read_bit();
     // Issue a 1-Wire rom select command, you do the reset first.
     void select( uint8_t rom[8]);
 	// Issue skip rom

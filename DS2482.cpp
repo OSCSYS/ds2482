@@ -193,7 +193,6 @@ uint8_t DS2482::read()
 	end();
 	busyWait();
 	setReadPtr(PTR_READ);
-	busyWait();
 	return readByte();
 }
 
@@ -206,7 +205,7 @@ void DS2482::wireWriteBit(uint8_t bit)
 	end();
 }
 
-uint8_t DS2482::wireReadBit()
+uint8_t DS2482::read_bit()
 {
 	wireWriteBit(1);
 	uint8_t status = busyWait(true);
