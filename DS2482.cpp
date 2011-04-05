@@ -196,7 +196,7 @@ uint8_t DS2482::read()
 	return readByte();
 }
 
-void DS2482::wireWriteBit(uint8_t bit)
+void DS2482::write_bit(uint8_t bit)
 {
 	busyWait(true);
 	begin();
@@ -207,7 +207,7 @@ void DS2482::wireWriteBit(uint8_t bit)
 
 uint8_t DS2482::read_bit()
 {
-	wireWriteBit(1);
+	write_bit(1);
 	uint8_t status = busyWait(true);
 	return status & DS2482_STATUS_SBR ? 1 : 0;
 }
