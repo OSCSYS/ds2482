@@ -22,10 +22,10 @@ Updates:
 	dec 5th, 2009: included a search function fix by Don T
 	see http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1242137666
 */
-#include "WConstants.h"
+#include <Arduino.h>
 
 #include "DS2482.h"
-#include "Wire.h"
+#include <Wire.h>
 
 
 #define PTR_STATUS 0xf0
@@ -40,28 +40,18 @@ DS2482::DS2482(uint8_t addr)
 }
 
 //-------helpers
-void DS2482::begin()
-{
-	Wire.beginTransmission(mAddress);
-}
-
-void DS2482::end()
-{
-	Wire.endTransmission();
-}
-
 void DS2482::setReadPtr(uint8_t readPtr)
 {
-	begin();
-	Wire.send(0xe1);
-	Wire.send(readPtr);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xe1);
+	Wire.write(readPtr);
+	Wire.endTransmission();
 }
 
 uint8_t DS2482::readByte()
 {
 	Wire.requestFrom(mAddress,(uint8_t)1);
-	return Wire.receive();
+	return Wire.read();
 }
 
 uint8_t DS2482::wireReadStatus(bool setPtr)
@@ -92,18 +82,18 @@ uint8_t DS2482::busyWait(bool setReadPtr)
 void DS2482::resetMaster()
 {
 	mTimeout = 0;
-	begin();
-	Wire.send(0xf0);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xf0);
+	Wire.endTransmission();
 }
 
 bool DS2482::configure(uint8_t config)
 {
 	busyWait(true);
-	begin();
-	Wire.send(0xd2);
-	Wire.send(config | (~config)<<4);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xd2);
+	Wire.write(config | (~config)<<4);
+	Wire.endTransmission();
 
 	return readByte() == config;
 }
@@ -150,10 +140,10 @@ bool DS2482::selectChannel(uint8_t channel)
 	};
 
 	busyWait(true);
-	begin();
-	Wire.send(0xc3);
-	Wire.send(ch);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xc3);
+	Wire.write(ch);
+	Wire.endTransmission();
 	busyWait();
 	
 	uint8_t check = readByte();
@@ -166,9 +156,9 @@ bool DS2482::selectChannel(uint8_t channel)
 bool DS2482::reset()
 {
 	busyWait(true);
-	begin();
-	Wire.send(0xb4);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xb4);
+	Wire.endTransmission();
 	
 	uint8_t status = busyWait();
 	
@@ -179,18 +169,18 @@ bool DS2482::reset()
 void DS2482::write(uint8_t b, uint8_t power)
 {
 	busyWait(true);
-	begin();
-	Wire.send(0xa5);
-	Wire.send(b);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0xa5);
+	Wire.write(b);
+	Wire.endTransmission();
 }
 
 uint8_t DS2482::read()
 {
 	busyWait(true);
-	begin();
-	Wire.send(0x96);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0x96);
+	Wire.endTransmission();
 	busyWait();
 	setReadPtr(PTR_READ);
 	return readByte();
@@ -199,10 +189,10 @@ uint8_t DS2482::read()
 void DS2482::write_bit(uint8_t bit)
 {
 	busyWait(true);
-	begin();
-	Wire.send(0x87);
-	Wire.send(bit ? 0x80 : 0);
-	end();
+	Wire.beginTransmission(mAddress);
+	Wire.write(0x87);
+	Wire.write(bit ? 0x80 : 0);
+	Wire.endTransmission();
 }
 
 uint8_t DS2482::read_bit()
@@ -262,10 +252,10 @@ uint8_t DS2482::search(uint8_t *newAddr)
 			direction = i == searchLastDisrepancy;
 		
 		busyWait();
-		begin();
-		Wire.send(0x78);
-		Wire.send(direction ? 0x80 : 0);
-		end();
+		Wire.beginTransmission(mAddress);
+		Wire.write(0x78);
+		Wire.write(direction ? 0x80 : 0);
+		Wire.endTransmission();
 		uint8_t status = busyWait();
 		
 		uint8_t id = status & DS2482_STATUS_SBR;

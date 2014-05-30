@@ -98,8 +98,6 @@ private:
 	void setReadPtr(uint8_t readPtr);
 	
 	uint8_t busyWait(bool setReadPtr=false); //blocks until
-	void begin();
-	void end();
 	
 #if ONEWIRE_SEARCH
 	uint8_t searchAddress[8];
